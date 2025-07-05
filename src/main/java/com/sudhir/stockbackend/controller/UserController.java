@@ -33,4 +33,12 @@ public class UserController {
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request){
         return service.loginUser(request);
     }
+
+//    @PostMapping("/login")
+//    public ResponseEntity<Map<String, String>> login(@RequestBody @Valid LoginRequest request) {
+//        String token = service.loginUser(request);
+//        Map<String, String> response = new HashMap<>();
+//        response.put("token", token);
+//        return ResponseEntity.ok(response);
+//    }
 }

@@ -28,7 +28,6 @@ public class UserService {
 
     public ResponseEntity<String> loginUser(LoginRequest request) {
         var user = repository.findByEmail(request.getEmail());
-        //System.out.println("service user "+user);
         if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
@@ -36,7 +35,6 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
         String token = jwtService.generateToken(user.get());
-        //System.out.println("token"+token);
         return ResponseEntity.ok(token);
 
     }

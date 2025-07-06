@@ -23,6 +23,9 @@ public class UserModel {
     private Long userId;
 
     @Column(nullable = false, unique = true, length = 100)
+    private String username;
+
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
     @Column(nullable = false)
@@ -34,6 +37,7 @@ public class UserModel {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CompanyModel> companies;
 
@@ -45,7 +49,6 @@ public class UserModel {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    // You can also add @PrePersist and @PreUpdate to auto-set timestamps:
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();

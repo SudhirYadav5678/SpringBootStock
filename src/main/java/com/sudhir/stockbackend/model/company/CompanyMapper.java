@@ -3,8 +3,7 @@ package com.sudhir.stockbackend.model.company;
 import com.sudhir.stockbackend.model.UserModel;
 
 public class CompanyMapper {
-    public static CompanyModel toEntity(CompanyRequest request, Long userId) {
-        UserModel user = UserModel.builder().userId(userId).build();
+    public static CompanyModel toEntity(CompanyRequest request) {
         return CompanyModel.builder()
                 .companyName(request.getCompanyName())
                 .description(request.getDescription())
@@ -12,7 +11,6 @@ public class CompanyMapper {
                 .stockQuantity(request.getStockQuantity())
                 .currentStockPrice(request.getCurrentStockPrice())
                 .publicAvailable(request.isPublicAvailable())
-                .userId(user)
                 .build();
     }
 

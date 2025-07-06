@@ -29,6 +29,5 @@ public class CompanyRequest {
     private BigDecimal currentStockPrice;
 
     private boolean publicAvailable;
-    @NotNull(message = "User Id is required")
-    private Long userId;
+
 }

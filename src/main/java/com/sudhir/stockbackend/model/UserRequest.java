@@ -15,6 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequest {
+    @NotBlank(message = "UserName is required")
+    private String username;
+
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;
@@ -25,6 +28,7 @@ public class UserRequest {
 
     @NotBlank(message = "Full name is required")
     private String fullName;
+
     @Builder.Default
     private Role role = Role.USER;
 }

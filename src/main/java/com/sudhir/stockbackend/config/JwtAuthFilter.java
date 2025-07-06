@@ -28,6 +28,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
+        //System.out.println("1 AuthHeader "+authHeader);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -35,19 +36,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         final String token = authHeader.substring(7);
         final String username = jwtService.extractUsername(token);
-        System.out.println("[JWT Filter] Token: " + token);
-        System.out.println("[JWT Filter] Username from token: " + username);
+        //System.out.println("2 [JWT Filter] Token: " + token);
+        //System.out.println("3 [JWT Filter] Username from token: " + username);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
+            //System.out.println("4 userDetails"+userDetails);
             if (jwtService.isTokenValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                System.out.println("[JWT Filter] Auth set for user: " + username);
+               // System.out.println("5 [JWT Filter] Auth set for user: " + username);
             } else {
-                System.out.println("[JWT Filter] Invalid token");
+                //System.out.println("6 [JWT Filter] Invalid token");
             }
         }
         filterChain.doFilter(request, response);

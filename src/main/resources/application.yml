@@ -13,7 +13,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   jpa.properties.hibernate.format_sql: true
@@ -23,6 +23,6 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 jwt:
-  secret: "aVeryLongSecretString_aVeryLongSecretString_aVeryLongSecretString_123456"
+  secret: "J8dK2pR6uS9vX1bQ4fT7zM0cN3hW5eY8aD6gJ2kP4rU7wQ1xL9vB3nT0sV5mZ8ab"
   expiration: 3600000
 

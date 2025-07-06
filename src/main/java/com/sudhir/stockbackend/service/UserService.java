@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class UserService {
-    private UserRepository repository;
+    private final UserRepository repository;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -26,8 +26,10 @@ public class UserService {
         return UserMapper.toResponse(savedUser);
     }
 
-    public ResponseEntity<String> loginUser(LoginRequest request) {
+    public ResponseEntity<String> loginUser(LoginRequest request){
+        System.out.println("request "+request);
         var user = repository.findByEmail(request.getEmail());
+        System.out.println("service user "+user);
         if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
@@ -35,7 +37,7 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
         String token = jwtService.generateToken(user.get());
+        System.out.println("token"+token);
         return ResponseEntity.ok(token);
-
     }
 }

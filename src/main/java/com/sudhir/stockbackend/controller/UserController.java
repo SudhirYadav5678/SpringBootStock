@@ -17,7 +17,6 @@ public class UserController {
     @Autowired
     private UserService service;
 
-
     @GetMapping("/hello")
     public String userHello(){
         return "Hello";
@@ -34,11 +33,4 @@ public class UserController {
         return service.loginUser(request);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<Map<String, String>> login(@RequestBody @Valid LoginRequest request) {
-//        String token = service.loginUser(request);
-//        Map<String, String> response = new HashMap<>();
-//        response.put("token", token);
-//        return ResponseEntity.ok(response);
-//    }
 }

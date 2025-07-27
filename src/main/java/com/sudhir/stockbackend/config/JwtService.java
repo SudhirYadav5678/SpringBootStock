@@ -1,6 +1,7 @@
 package com.sudhir.stockbackend.config;
 
-import com.sudhir.stockbackend.model.UserModel;
+import com.sudhir.stockbackend.model.company.CompanyModel;
+import com.sudhir.stockbackend.model.user.UserModel;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,16 @@ public class JwtService {
                 .setSubject(user.getEmail())
                 .claim("userId", user.getUserId())
                 .claim("role", user.getRole())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    public String generateTokenBYCompany(CompanyModel company) {
+        return Jwts.builder()
+                .setSubject(company.getCompanyName())
+                .claim("userId", company.getCompanyId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)

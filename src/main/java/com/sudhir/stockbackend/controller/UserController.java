@@ -1,8 +1,8 @@
 package com.sudhir.stockbackend.controller;
 
-import com.sudhir.stockbackend.model.LoginRequest;
-import com.sudhir.stockbackend.model.UserRequest;
-import com.sudhir.stockbackend.model.UserResponse;
+import com.sudhir.stockbackend.model.user.LoginRequest;
+import com.sudhir.stockbackend.model.user.UserRequest;
+import com.sudhir.stockbackend.model.user.UserResponse;
 import com.sudhir.stockbackend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

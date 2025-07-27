@@ -1,7 +1,7 @@
 package com.sudhir.stockbackend.service;
 
 import com.sudhir.stockbackend.config.JwtService;
-import com.sudhir.stockbackend.model.*;
+import com.sudhir.stockbackend.model.user.*;
 import com.sudhir.stockbackend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-
+    // create account
     public UserResponse createUser(UserRequest request) {
         String encoderPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(encoderPassword);
@@ -26,6 +26,7 @@ public class UserService {
         return UserMapper.toResponse(savedUser);
     }
 
+    // login  user
     public ResponseEntity<String> loginUser(LoginRequest request){
         System.out.println("request "+request);
         var user = repository.findByEmail(request.getEmail());
@@ -40,4 +41,7 @@ public class UserService {
         System.out.println("token"+token);
         return ResponseEntity.ok(token);
     }
+
+    // update account info.
+
 }

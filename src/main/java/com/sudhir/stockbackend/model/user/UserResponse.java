@@ -1,8 +1,5 @@
-package com.sudhir.stockbackend.model;
+package com.sudhir.stockbackend.model.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +13,6 @@ public class UserResponse {
     private Long id;
     private String username;
     private String email;
-    private String password;
     private String fullName;
+
 }

@@ -1,5 +1,6 @@
 package com.sudhir.stockbackend.controller;
 
+import com.sudhir.stockbackend.model.company.CompanyLoginRequest;
 import com.sudhir.stockbackend.model.company.CompanyRequest;
 import com.sudhir.stockbackend.model.company.CompanyResponse;
 import com.sudhir.stockbackend.service.CompanyService;
@@ -17,8 +18,15 @@ public class CompanyController {
     private CompanyService service;
 
     @PostMapping("/register")
-    public ResponseEntity<CompanyResponse> createCompany(@RequestBody @Valid CompanyRequest request) {
-        var company = service.createCompany(request);
-        return new ResponseEntity<>(company, HttpStatus.CREATED);
+    public ResponseEntity<CompanyResponse> createCompany(@Valid @RequestBody CompanyRequest request) {
+        //System.out.println(request);
+        CompanyResponse response = service.createCompany(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginCompany(@Valid @RequestBody CompanyLoginRequest request){
+        System.out.println("Request in Controller "+ request);
+        return service.companyLogin(request);
     }
 }

@@ -1,14 +1,13 @@
-package com.sudhir.stockbackend.model;
+package com.sudhir.stockbackend.model.user;
 
-import com.sudhir.stockbackend.model.company.CompanyModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -38,8 +37,18 @@ public class UserModel {
     @Column(nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CompanyModel> companies;
+    private boolean enabled;
+
+    @Column(nullable = false)
+    private BigDecimal accountBalance ;
+
+    private String bankName;
+
+    private String accountNumber;
+
+    private String ifscCode;
+
+    private String upiId;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)

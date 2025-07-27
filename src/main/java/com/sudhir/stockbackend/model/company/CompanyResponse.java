@@ -11,7 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 public class CompanyResponse {
     private Long companyId;
+    private String companySymbol;
     private String companyName;
+    private String companyEmail;
     private String description;
     private BigDecimal initialStockPrice;
     private BigDecimal stockQuantity;

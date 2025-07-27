@@ -1,5 +1,7 @@
 package com.sudhir.stockbackend.model.company;
 
+
+import com.sudhir.stockbackend.model.user.Role;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +15,18 @@ import java.math.BigDecimal;
 public class CompanyRequest {
     @NotBlank(message = "Company name must not be blank")
     private String companyName;
+
+    @NotNull(message = "Company Symbol must not be blank")
+    private String companySymbol;
+
+    @NotNull(message = "Company Email must not be blank")
+    private String companyEmail;
+
+    @NotBlank(message = "Password must not be blank")
+    private String password;
+
+    @Builder.Default
+    private Role role = Role.COMPANY;
 
     private String description;
 
@@ -28,6 +42,10 @@ public class CompanyRequest {
     @DecimalMin(value = "0.0", inclusive = false, message = "Current stock price must be greater than 0")
     private BigDecimal currentStockPrice;
 
-    private boolean publicAvailable;
+    @Builder.Default
+    private boolean publicAvailable = true;
+
+    @Builder.Default
+    private boolean enabled = true;
 
 }

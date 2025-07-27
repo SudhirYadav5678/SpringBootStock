@@ -1,36 +1,40 @@
 package com.sudhir.stockbackend.service;
 
 import com.sudhir.stockbackend.config.JwtService;
-import com.sudhir.stockbackend.model.UserModel;
-import com.sudhir.stockbackend.model.company.CompanyMapper;
-import com.sudhir.stockbackend.model.company.CompanyModel;
-import com.sudhir.stockbackend.model.company.CompanyRequest;
-import com.sudhir.stockbackend.model.company.CompanyResponse;
+import com.sudhir.stockbackend.model.company.*;
 import com.sudhir.stockbackend.repository.CompanyRepository;
-import com.sudhir.stockbackend.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class CompanyService {
     private final CompanyRepository repository;
-    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public CompanyResponse createCompany(CompanyRequest request) {
-        // get email from SecurityContext
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserModel user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found for email: " + email));
+        String encoderPassword = passwordEncoder.encode(request.getPassword());
+        request.setPassword(encoderPassword);
+        CompanyModel companyModel = CompanyMapper.toEntity(request);
+        CompanyModel saved = repository.save(companyModel);
+        return CompanyMapper.toResponse(saved);
+    }
 
-        // map request to entity
-        CompanyModel company = CompanyMapper.toEntity(request);
-        // set user
-        company.setUserId(user);
-
-        CompanyModel savedCompany = repository.save(company);
-        return CompanyMapper.toResponse(savedCompany);
+    public ResponseEntity<String> companyLogin(CompanyLoginRequest request) {
+        System.out.println("Request in login "+ request);
+        var company = repository.findByCompanyEmail(request.getCompanyEmail());
+        if (company.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        }
+        if (!passwordEncoder.matches(request.getPassword(), company.get().getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        }
+        String token = jwtService.generateTokenBYCompany(company.get());
+        System.out.println("token"+token);
+        return ResponseEntity.ok(token);
     }
 }

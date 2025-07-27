@@ -1,4 +1,4 @@
-package com.sudhir.stockbackend.model;
+package com.sudhir.stockbackend.model.user;
 
 public enum Role {
     ADMIN,

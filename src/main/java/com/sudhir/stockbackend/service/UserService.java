@@ -1,11 +1,18 @@
 package com.sudhir.stockbackend.service;
 
+import com.sudhir.stockbackend.config.CustomUserDetailsService;
 import com.sudhir.stockbackend.config.JwtService;
 import com.sudhir.stockbackend.model.user.*;
 import com.sudhir.stockbackend.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.User;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +49,22 @@ public class UserService {
         return ResponseEntity.ok(token);
     }
 
-    // update account info.
 
+    // update account info.
+    public UserAccountResponse updateAccountDetails(@Valid Long userId, UserAccountRequest request, HttpServletRequest http) {
+        final String authHeader = http.getHeader("Authorization");
+        System.out.println("1 AuthHeader "+authHeader);
+
+        final String token = authHeader.substring(7);
+        final String username = jwtService.extractUsername(token);
+        System.out.println(username);
+
+        UserModel existingUser = repository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserMapper.updateAccountFields(existingUser, request);
+
+        UserModel savedUser = repository.save(existingUser);
+        return UserMapper.toAccountResponse(savedUser);
+    }
 }

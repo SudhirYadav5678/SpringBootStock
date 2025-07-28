@@ -1,11 +1,11 @@
 package com.sudhir.stockbackend.controller;
 
-import com.sudhir.stockbackend.model.user.LoginRequest;
-import com.sudhir.stockbackend.model.user.UserRequest;
-import com.sudhir.stockbackend.model.user.UserResponse;
+import com.sudhir.stockbackend.model.user.*;
 import com.sudhir.stockbackend.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,4 +33,9 @@ public class UserController {
         return service.loginUser(request);
     }
 
+    @PostMapping("/accountDetails/{userId}")
+    public ResponseEntity<UserAccountResponse> addAccountDetails(@Valid @PathVariable Long userId, @RequestBody UserAccountRequest request, HttpServletRequest http){
+        UserAccountResponse response = service.updateAccountDetails(userId,request,http);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 }

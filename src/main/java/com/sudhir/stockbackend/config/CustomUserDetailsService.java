@@ -2,6 +2,7 @@ package com.sudhir.stockbackend.config;
 
 import com.sudhir.stockbackend.model.user.UserModel;
 import com.sudhir.stockbackend.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,4 +28,5 @@ public class CustomUserDetailsService implements UserDetailsService {
                 new ArrayList<>()
         );
     }
+
 }

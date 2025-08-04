@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface CompanyRepository extends JpaRepository<CompanyModel,Long> {
     Optional<CompanyModel> findByCompanyEmail(String companyName);
+
+    Optional<CompanyModel> findByCompanyName(@NotBlank(message = "Company Name is required") String companyName);
 }

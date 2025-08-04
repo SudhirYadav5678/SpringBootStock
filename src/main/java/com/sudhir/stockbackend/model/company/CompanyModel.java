@@ -54,7 +54,7 @@ public class CompanyModel {
     private boolean enabled;
 
     @Column(nullable = false)
-    private BigDecimal accountBalance ;
+    private BigDecimal accountBalance = BigDecimal.ZERO;
 
     private String bankName;
 
@@ -66,13 +66,11 @@ public class CompanyModel {
 
 
     @Temporal(TemporalType.TIMESTAMP)
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
-
     private LocalDateTime updatedAt;
 
     @PrePersist

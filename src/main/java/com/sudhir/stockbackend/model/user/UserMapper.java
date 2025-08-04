@@ -12,6 +12,7 @@ public class UserMapper {
         user.setPassword(request.getPassword());
         user.setFullName(request.getFullName());
         user.setRole(request.getRole());
+        user.setEnabled(request.isEnabled());
         return user;
     }
 

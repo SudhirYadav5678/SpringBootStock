@@ -48,4 +48,17 @@ public class CompanyRequest {
     @Builder.Default
     private boolean enabled = true;
 
+    private BigDecimal accountBalance;
+
+    @NotNull(message = "Bank name  is required")
+    private String bankName;
+
+    @NotNull(message = "Account number  is required")
+    private String accountNumber;
+
+    @NotNull(message = "Ifsc code is required")
+    private String ifscCode;
+
+    private String upiId;
+
 }

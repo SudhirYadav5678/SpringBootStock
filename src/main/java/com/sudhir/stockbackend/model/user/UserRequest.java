@@ -32,5 +32,5 @@ public class UserRequest {
     private Role role = Role.USER;
 
     @Builder.Default
-    private boolean enabled = false;
+    private boolean enabled = true;
 }

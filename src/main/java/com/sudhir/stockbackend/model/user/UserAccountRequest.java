@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class UserAccountRequest {
 
-    private BigDecimal accountBalance ;
+    private BigDecimal accountBalance;
 
     @NotNull(message = "Bank name is required")
     private String bankName;

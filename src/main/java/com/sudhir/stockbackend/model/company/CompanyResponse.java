@@ -19,6 +19,11 @@ public class CompanyResponse {
     private BigDecimal stockQuantity;
     private BigDecimal currentStockPrice;
     private boolean publicAvailable;
+    private BigDecimal accountBalance;
+    private String bankName;
+    private String accountNumber;
+    private String ifscCode;
+    private String upiId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

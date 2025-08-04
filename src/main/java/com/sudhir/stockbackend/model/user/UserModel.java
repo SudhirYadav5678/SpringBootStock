@@ -40,7 +40,7 @@ public class UserModel {
     private boolean enabled;
 
     @Column(nullable = false)
-    private BigDecimal accountBalance ;
+    private BigDecimal accountBalance = BigDecimal.ZERO;
 
     private String bankName;
 

@@ -1,6 +1,8 @@
 package com.sudhir.stockbackend.model.buy;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +18,7 @@ public class BuyRequest {
     private String username;
     @NotBlank(message = "Company Name is required")
     private String companyName;
-    @NotBlank(message = "Transition Amount is required")
     private BigDecimal transitionAmount;
-    @NotBlank(message = "Stock Amount is required")
     private BigDecimal stockAmount;
+
 }

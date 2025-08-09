@@ -16,7 +16,7 @@ spring:
     show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-  jpa.properties.hibernate.format_sql: true
+  jpa.properties.hibernate.format_sql: false
 
 logging:
   level:

@@ -62,10 +62,6 @@ public class JwtService {
                 .getBody();
     }
 
-//    public Long extractUserId(String token) {
-//        return extractAllClaims(token).get("userId", Long.class);
-//    }
-
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }

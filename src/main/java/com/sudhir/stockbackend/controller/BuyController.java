@@ -3,7 +3,6 @@ package com.sudhir.stockbackend.controller;
 import com.sudhir.stockbackend.model.buy.BuyRequest;
 import com.sudhir.stockbackend.model.buy.BuyResponse;
 import com.sudhir.stockbackend.service.BuyService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

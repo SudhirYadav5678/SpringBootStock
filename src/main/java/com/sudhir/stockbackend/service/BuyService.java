@@ -3,18 +3,20 @@ package com.sudhir.stockbackend.service;
 import com.sudhir.stockbackend.model.buy.BuyMapper;
 import com.sudhir.stockbackend.model.buy.BuyModel;
 import com.sudhir.stockbackend.model.buy.BuyRequest;
-import com.sudhir.stockbackend.model.buy.BuyResponse;
 import com.sudhir.stockbackend.model.company.CompanyModel;
 import com.sudhir.stockbackend.model.user.UserModel;
 import com.sudhir.stockbackend.repository.BuyRepository;
 import com.sudhir.stockbackend.repository.CompanyRepository;
 import com.sudhir.stockbackend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 @AllArgsConstructor
@@ -26,19 +28,48 @@ public class BuyService {
     @Autowired
     private BuyRepository buyRepository;
 
-    public BuyResponse createStockBuy(BuyRequest request){
-        Optional<UserModel> userOpt = userRepository.findByUsername(request.getUsername());
-        if (userOpt.isEmpty()) {
-            throw new RuntimeException("User does not exist");
-        }
 
-        Optional<CompanyModel> companyOpt = companyRepository.findByCompanyName(request.getCompanyName());
-        if (companyOpt.isEmpty()) {
-            throw new RuntimeException("Company Name does not exist");
-        }
+    private final Map<String, BlockingQueue<BuyRequest>> companyQueues = new ConcurrentHashMap<>();
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
-        UserModel user = userOpt.get();
-        CompanyModel company = companyOpt.get();
+    public BuyOrderService(UserRepository userRepository,
+                           CompanyRepository companyRepository,
+                           BuyRepository buyRepository) {
+        this.userRepository = userRepository;
+        this.companyRepository = companyRepository;
+        this.buyRepository = buyRepository;
+    }
+
+    public void enqueueOrder(BuyRequest request) {
+        companyQueues
+                .computeIfAbsent(request.getCompanyName(), name -> {
+                    BlockingQueue<BuyRequest> queue = new LinkedBlockingQueue<>();
+                    startProcessingThread(name, queue);
+                    return queue;
+                })
+                .offer(request);
+    }
+
+    private void startProcessingThread(String companyName, BlockingQueue<BuyRequest> queue) {
+        executorService.submit(() -> {
+            while (true) {
+                try {
+                    BuyRequest request = queue.take(); // waits for new orders
+                    processOrder(request); // transactional method
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Transactional
+    public void processOrder(BuyRequest request) {
+        UserModel user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("User does not exist"));
+
+        CompanyModel company = companyRepository.findByCompanyName(request.getCompanyName())
+                .orElseThrow(() -> new RuntimeException("Company does not exist"));
 
         BigDecimal totalCost = request.getStockAmount().multiply(request.getTransitionAmount());
 
@@ -46,14 +77,14 @@ public class BuyService {
             throw new RuntimeException("Insufficient account balance");
         }
 
-        // Deduct balance
+        // Deduct and save
         user.setAccountBalance(user.getAccountBalance().subtract(totalCost));
         userRepository.save(user);
 
         // Save stock purchase
         BuyModel buy = BuyMapper.toEntity(request);
-        BuyModel buyStock = buyRepository.save(buy);
+        buyRepository.save(buy);
 
-        return BuyMapper.toResponse(buyStock);
+        System.out.println("Processed order for " + companyName + ": " + request);
     }
 }

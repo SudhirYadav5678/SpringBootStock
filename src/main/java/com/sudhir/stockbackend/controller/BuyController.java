@@ -22,7 +22,7 @@ public class BuyController {
     @PostMapping("/buy")
     public ResponseEntity<BuyResponse> stockBuy(@RequestBody BuyRequest request ){
         System.out.println(request);
-        BuyResponse buy = buyService.createStockBuy(request);
+        BuyResponse buy = buyService.processOrder(request);
         return new ResponseEntity<>(buy, HttpStatus.OK);
     }
 }

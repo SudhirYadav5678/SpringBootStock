@@ -18,7 +18,6 @@ public class BuyRequest {
     private String username;
     @NotBlank(message = "Company Name is required")
     private String companyName;
-    private BigDecimal transitionAmount;
     private BigDecimal stockAmount;
 
 }

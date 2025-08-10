@@ -8,7 +8,6 @@ public class BuyMapper {
                 .username(request.getUsername())
                 .companyName(request.getCompanyName())
                 .stockAmount(request.getStockAmount())
-                .transitionAmount(request.getTransitionAmount())
                 .build();
     }
 

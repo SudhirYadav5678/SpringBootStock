@@ -3,6 +3,7 @@ package com.sudhir.stockbackend.service;
 import com.sudhir.stockbackend.model.buy.BuyMapper;
 import com.sudhir.stockbackend.model.buy.BuyModel;
 import com.sudhir.stockbackend.model.buy.BuyRequest;
+import com.sudhir.stockbackend.model.buy.BuyResponse;
 import com.sudhir.stockbackend.model.company.CompanyModel;
 import com.sudhir.stockbackend.model.user.UserModel;
 import com.sudhir.stockbackend.repository.BuyRepository;
@@ -14,9 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
+
 
 @Service
 @AllArgsConstructor
@@ -28,43 +30,18 @@ public class BuyService {
     @Autowired
     private BuyRepository buyRepository;
 
+    private final Map<String, LinkedBlockingQueue<BuyRequest>> companyOrders = new ConcurrentHashMap<>();
 
-    private final Map<String, BlockingQueue<BuyRequest>> companyQueues = new ConcurrentHashMap<>();
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
-
-    public BuyOrderService(UserRepository userRepository,
-                           CompanyRepository companyRepository,
-                           BuyRepository buyRepository) {
-        this.userRepository = userRepository;
-        this.companyRepository = companyRepository;
-        this.buyRepository = buyRepository;
-    }
-
-    public void enqueueOrder(BuyRequest request) {
-        companyQueues
-                .computeIfAbsent(request.getCompanyName(), name -> {
-                    BlockingQueue<BuyRequest> queue = new LinkedBlockingQueue<>();
-                    startProcessingThread(name, queue);
-                    return queue;
-                })
+    public void addOrderINQueue(BuyRequest request){
+        companyOrders
+                .computeIfAbsent(request.getCompanyName(),
+                        k -> new LinkedBlockingQueue<>()
+                )
                 .offer(request);
     }
 
-    private void startProcessingThread(String companyName, BlockingQueue<BuyRequest> queue) {
-        executorService.submit(() -> {
-            while (true) {
-                try {
-                    BuyRequest request = queue.take(); // waits for new orders
-                    processOrder(request); // transactional method
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
     @Transactional
-    public void processOrder(BuyRequest request) {
+    public BuyResponse processOrder(BuyRequest request) {
         UserModel user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User does not exist"));
 
@@ -76,15 +53,30 @@ public class BuyService {
         if (user.getAccountBalance().compareTo(totalCost) < 0) {
             throw new RuntimeException("Insufficient account balance");
         }
+        // add to queue for FIFO
+        addOrderINQueue(request);
 
-        // Deduct and save
+        var order = companyOrders.containsKey(request.getUsername());
+        if(!order){
+            throw new RuntimeException("Error while adding order in queue");
+        }
+
+        // amount reduce from userAccount.
         user.setAccountBalance(user.getAccountBalance().subtract(totalCost));
+        // todo:add stock and company in user profile.
         userRepository.save(user);
+
+        // amount reduce from company.
+        company.setStockQuantity(company.getStockQuantity().subtract(request.getStockAmount()));
+        companyRepository.save(company);
 
         // Save stock purchase
         BuyModel buy = BuyMapper.toEntity(request);
         buyRepository.save(buy);
 
-        System.out.println("Processed order for " + companyName + ": " + request);
+        BuyResponse savedBuy = BuyMapper.toResponse(buy);
+
+        System.out.println("Processed order for " + company.getCompanyName() + ": " + request);
+        return savedBuy;
     }
 }

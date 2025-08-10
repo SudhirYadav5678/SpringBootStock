@@ -20,9 +20,9 @@ public class BuyController {
     @Autowired
     private BuyService buyService;
     @PostMapping("/buy")
-    public ResponseEntity<BuyResponse> stockBuy(@RequestBody BuyRequest request ){
+    public String stockBuy(@RequestBody BuyRequest request ){
         System.out.println(request);
-        BuyResponse buy = buyService.processOrder(request);
-        return new ResponseEntity<>(buy, HttpStatus.OK);
+        String buy = buyService.addOrderBuy(request);
+        return "Order is complete";
     }
 }

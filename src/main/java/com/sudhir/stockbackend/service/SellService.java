@@ -28,7 +28,7 @@ public class SellService {
         // stocks information
         Optional<BuyModel> userBuy = buyRepository.findByUsername(username);
         if(userBuy.isEmpty()){
-            throw new RuntimeException("User with ${username} dose not exit");
+            throw new RuntimeException("User with username dose not exit");
         }
 
         UserModel savedUser = user.get();

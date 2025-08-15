@@ -55,4 +55,10 @@ public class SellService {
 
         return "Order for the sell of stocks completed";
     }
+
+
+    // price decrease after every buy of stocks.
+    public void stockPriceDecrease(){
+
+    }
 }

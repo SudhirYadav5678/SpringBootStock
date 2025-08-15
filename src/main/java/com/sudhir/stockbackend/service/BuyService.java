@@ -114,4 +114,9 @@ public class BuyService {
 
         // todo: already exist stock purchase.
     }
+
+    // price increase after every buy of stocks.
+    public void stockPriceIncrease(){
+
+    }
 }

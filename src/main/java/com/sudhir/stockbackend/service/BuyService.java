@@ -111,6 +111,7 @@ public class BuyService {
         // Save buy record
         BuyModel buy = BuyMapper.toEntity(request);
         buyRepository.save(buy);
+<<<<<<< HEAD
 
         // todo: already exist stock purchase.
     }
@@ -118,5 +119,7 @@ public class BuyService {
     // price increase after every buy of stocks.
     public void stockPriceIncrease(){
 
+=======
+>>>>>>> 0f365ebd12e328dc393999b639778781d5502045
     }
 }

@@ -1,6 +1,7 @@
 package com.sudhir.stockbackend.service;
 
 import com.sudhir.stockbackend.model.buy.BuyModel;
+import com.sudhir.stockbackend.model.company.CompanyModel;
 import com.sudhir.stockbackend.model.sell.SellRequest;
 import com.sudhir.stockbackend.model.user.UserModel;
 import com.sudhir.stockbackend.repository.BuyRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 @Service
@@ -58,7 +60,9 @@ public class SellService {
 
 
     // price decrease after every buy of stocks.
-    public void stockPriceDecrease(){
-
+    public void stockPriceDecrease(CompanyModel request){
+        BigDecimal company = request.getCurrentStockPrice();
+        BigDecimal newPrice = company.subtract(company.multiply(BigDecimal.valueOf(0.1)));
+        request.setCurrentStockPrice(newPrice);
     }
 }

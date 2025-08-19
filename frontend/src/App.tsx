@@ -1,19 +1,19 @@
 import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home'
-import Navbar from './components/Navbar'
+import Layout from './pages/Layout'
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path='/' element={<Home />}>
+      <Route path='/' element={<Layout />}>
+        <Route path='/' element={<Home />} />
       </Route>
     )
   )
 
   return (
     <>
-      <Navbar />
       <RouterProvider router={router}></RouterProvider>
     </>
   )

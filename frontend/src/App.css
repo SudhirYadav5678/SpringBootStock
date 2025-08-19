@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+
+@theme inline{
+    --color-dark: oklch(37.9% 0.146 265.522);
+    --color-white: oklch(97% 0.001 106.424);
+    --color-primary: oklch(38% 0.189 293.745);
+    --color-secondary: oklch(55.8% 0.288 302.321);
+    --font-sans: sans-serif;
+}

@@ -29,6 +29,7 @@ public class Prices {
 
     @Column(name = "previous_Prices")
     private List<BigDecimal> prices;
+
     @Column(name = "Current_Prices")
     private BigDecimal currentPrice;
 }

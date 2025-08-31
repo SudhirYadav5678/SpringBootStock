@@ -40,15 +40,6 @@ public class CompanyModel {
 
     private String description;
 
-    @Column(name = "initial_stock_price", nullable = false)
-    private BigDecimal initialStockPrice;
-
-    @Column(name = "stock_quantity", nullable = false)
-    private BigDecimal stockQuantity;
-
-    @Column(name = "current_stock_price", nullable = false)
-    private BigDecimal currentStockPrice;
-
     private boolean publicAvailable;
 
     private boolean enabled;

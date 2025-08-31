@@ -1,11 +1,9 @@
 package com.sudhir.stockbackend.controller;
 
 import com.sudhir.stockbackend.model.stocksPrice.Prices;
-import com.sudhir.stockbackend.service.GetPrices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

@@ -13,6 +13,7 @@ public class GetPrices {
     @Autowired
     private CompanyRepository companyRepository;
 
+
     public Prices getStockPriceByName(String companyName) {
         //todo: separate company details and stocks prices different.
         Optional<CompanyModel> companyModel = companyRepository.findByCompanyName(companyName);
